@@ -6,6 +6,12 @@
 
 ## Introduction
 
+There are several ways to build a website, and Node.js remains one of the most useful and practical options, especially for real time, high concurrency, API driven and event based website applications. It is particularly effective when the server must handle many simultaneous connections with low latency.
+
+Think of Node.js as a tool that helps you build your own servers to handle requests, routing, authentication, payments, visual rendering, styles, dynamic behavior, and any other features a website may need.
+
+Common examples of websites built with Node.js include e-commerce, blogs, chat applications, small SaaS dashboards, content management tools, job boards, simple social networks, project management tools, and community forums. These types of projects benefit from Node.js's asynchronous architecture and its ability to handle many requests efficiently.
+
 In this article I'll walk you through building a complete dynamic website using Node.js, Express, EJS, and PostgreSQL. This is a practical, hands-on guide aimed at developers who are familiar with front-end development and want to understand how backend architecture works.
 
 By the end of this guide you will have built a working multi-page website with:
@@ -17,14 +23,14 @@ By the end of this guide you will have built a working multi-page website with:
 
 **Stack used:**
 
-| Layer | Tool |
+| Layer | Tool | Learn more |
 |---|---|
-| Runtime | Node.js |
-| Framework | Express.js |
-| Template Engine | EJS |
-| Database | PostgreSQL |
-| Config | dotenv |
-| Dev Tool | nodemon |
+| Runtime | Node.js | https://nodejs.org/en/about |
+| Framework | Express.js | https://expressjs.com/ |
+| Template Engine | EJS | https://ejs.co/#about |
+| Database | PostgreSQL | https://www.postgresql.org/ |
+| Config | dotenv | https://www.npmjs.com/package/dotenv |
+| Dev Tool | nodemon | https://www.npmjs.com/package/nodemon |
 
 ---
 
@@ -33,7 +39,7 @@ By the end of this guide you will have built a working multi-page website with:
 The request lifecycle flows like this:
 
 ```
-Browser → Express (router) → Controller → DB query → EJS template → HTML response
+Browser > Express (router) > Controller > DB query > EJS template > HTML response
 ```
 
 ### Folder Structure
