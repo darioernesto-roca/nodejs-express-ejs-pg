@@ -1,17 +1,17 @@
 const getHome = (req, res) => {
-    res.send('Home page');
+    res.render('home');
 };
 
 const getAbout = (req, res) => {
-    res.send('About page');
+    res.render('about');
 };
 
 const getBlog = (req, res) => {
-    res.send('Blog page');
+    res.render('blog');
 };
 
 const getContact = (req, res) => {
-    res.send('Contact page');
+    res.render('contact');
 }
 
 module.exports = {

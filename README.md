@@ -21,12 +21,20 @@ nodejs-express-ejs-pg/
 ├── package.json
 ├── .env                  (not committed)
 ├── routes/
+│   └── index.js
 ├── controllers/
+│   └── pageController.js
 ├── views/
-│   ├── layouts/
-│   └── partials/
+│   ├── partials/
+│   │   ├── header.ejs
+│   │   └── footer.ejs
+│   ├── home.ejs
+│   ├── about.ejs
+│   ├── blog.ejs
+│   └── contact.ejs
 ├── public/
 │   ├── css/
+│   │   └── style.css
 │   └── js/
 ├── db/
 ├── models/
@@ -87,7 +95,7 @@ Work in progress — being built phase by phase.
 
 - [x] Phase 1 — Project setup
 - [x] Phase 2 — Express server and routing
-- [ ] Phase 3 — EJS templates
+- [x] Phase 3 — EJS templates
 - [ ] Phase 4 — PostgreSQL integration
 - [ ] Phase 5 — Dynamic content and CRUD
 - [ ] Phase 6 — Authentication

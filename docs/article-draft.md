@@ -47,20 +47,28 @@ Browser > Express (router) > Controller > DB query > EJS template > HTML respons
 ```
 nodejs-express-ejs-pg/
 │
-├── app.js                  → Entry point, Express configuration
-├── package.json            → Project metadata and dependencies
-├── .env                    → Environment variables (never commit this)
+├── app.js                        → Entry point, Express configuration
+├── package.json                  → Project metadata and dependencies
+├── .env                          → Environment variables (never commit this)
 │
-├── routes/                 → URL path definitions
-├── controllers/            → Business logic per route
-├── views/                  → EJS templates
-│   ├── layouts/            → Base HTML wrapper
-│   └── partials/           → Reusable snippets (header, footer, nav)
-├── public/                 → Static files served directly
+├── routes/
+│   └── index.js                  → URL path definitions
+├── controllers/
+│   └── pageController.js         → Logic that runs when a route is hit
+├── views/                        → EJS templates
+│   ├── partials/
+│   │   ├── header.ejs            → Opens <html>, <head>, <body>, renders nav
+│   │   └── footer.ejs            → Closes <body>, <html>, renders footer
+│   ├── home.ejs
+│   ├── about.ejs
+│   ├── blog.ejs
+│   └── contact.ejs
+├── public/                       → Static files served directly
 │   ├── css/
+│   │   └── style.css
 │   └── js/
-├── db/                     → Database connection
-└── models/                 → Data shape definitions
+├── db/                           → Database connection
+└── models/                       → Data shape definitions
 ```
 
 ---
@@ -147,13 +155,113 @@ app.listen(PORT, () => {
 
 ### Phase 3 — Server Architecture: Routes and Controllers
 
-> [ ] To be completed
+The goal of this phase is to separate URL definitions from the logic that handles them. This is the foundation of a maintainable Express application.
+
+#### Why separate routes from controllers?
+
+| File | Responsibility |
+|---|---|
+| `routes/index.js` | "When this URL is hit, call this function" |
+| `controllers/pageController.js` | "Here is what that function actually does" |
+
+As the project grows, this separation keeps each file small and focused. Routes become a clean map of the application, and controllers hold all the logic.
+
+#### routes/index.js
+
+```js
+const express = require('express');
+const router = express.Router();
+const { getHome, getAbout, getBlog, getContact } = require('../controllers/pageController');
+
+router.get('/', getHome);
+router.get('/about', getAbout);
+router.get('/blog', getBlog);
+router.get('/contact', getContact);
+
+module.exports = router;
+```
+
+- `express.Router()` creates a mini Express application just for defining routes
+- Each route maps a URL and HTTP method to a controller function
+- `module.exports` makes the router available to `app.js`
+
+#### controllers/pageController.js
+
+```js
+const getHome = (req, res) => {
+  res.render('home');
+};
+
+const getAbout = (req, res) => {
+  res.render('about');
+};
+
+// ...and so on for each page
+
+module.exports = { getHome, getAbout, getBlog, getContact };
+```
+
+- Each function receives `req` (the request) and `res` (the response)
+- `res.render('home')` tells Express to find `views/home.ejs` and return rendered HTML
+- Functions are exported so the router can import them
+
+#### Connecting the router in app.js
+
+Replace the temporary test route in `app.js` with:
+
+```js
+const indexRouter = require('./routes/index');
+app.use('/', indexRouter);
+```
 
 ---
 
 ### Phase 4 — Template Engine: EJS
 
-> [ ] To be completed
+EJS (Embedded JavaScript) lets you write HTML with JavaScript logic embedded inside special tags.
+
+#### EJS tag reference
+
+| Tag | Purpose |
+|---|---|
+| `<%= value %>` | Outputs a value (HTML-escaped) |
+| `<% code %>` | Runs JavaScript — no output (loops, conditions) |
+| `<%- html %>` | Outputs raw unescaped HTML (used for includes) |
+
+#### Partials pattern
+
+Rather than repeating `<html>`, `<head>`, `<nav>`, and `<footer>` on every page, we create two partials that wrap all page content:
+
+- `partials/header.ejs` — opens `<html>`, `<head>`, `<body>`, and renders the nav
+- `partials/footer.ejs` — renders the footer and closes `</body>`, `</html>`
+
+The `header.ejs` partial accepts a `title` variable so each page can have its own `<title>` tag.
+
+#### Page structure
+
+Every page view follows this pattern:
+
+```html
+<%- include('partials/header', { title: 'Page Title' }) %>
+
+<main>
+  <h1>Page content here</h1>
+</main>
+
+<%- include('partials/footer') %>
+```
+
+This approach is more flexible than passing body content as a string to a layout, because EJS tags inside each page are processed normally.
+
+#### Static assets
+
+CSS, JavaScript, and images live in `/public` and are served directly by Express:
+
+```js
+app.use(express.static('public'));
+```
+
+A file at `public/css/style.css` is accessible at `http://localhost:3000/css/style.css` — no route needed.
 
 ---
 
